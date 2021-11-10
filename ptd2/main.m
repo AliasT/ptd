@@ -6,11 +6,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#include <AppKit/AppKit.h>
 
 int main(int argc, const char * argv[]) {
-    @autoreleasepool {
-        // insert code here...
-        NSLog(@"Hello, World!");
-    }
+    NSString* dest = [NSString stringWithUTF8String: argv[1]];
+    NSData* data = [NSPasteboard.generalPasteboard dataForType:NSPasteboardTypeTIFF];
+    NSError* error;
+    NSData* compressed = [data compressedDataUsingAlgorithm:NSDataCompressionAlgorithmLZFSE error:&error];
+    NSURL* to = [NSURL fileURLWithPath:dest];
+    [compressed writeToURL:to atomically:YES];
     return 0;
 }
